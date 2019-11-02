@@ -6,6 +6,7 @@ Source::Source(StatManager *manager, int sourceNumber, double lambda)
     this->sourceNumber_ = sourceNumber;
     this->lambda_ = lambda;
     this->currNum_ = 0;
+    this->current = nullptr;
     this->generateRequest();
 };
 

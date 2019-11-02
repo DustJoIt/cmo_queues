@@ -6,14 +6,14 @@ Manual::Manual(int nSources, int nBuffer, int nDevices, ModulingUnit *unit)
 {
     this->unit = unit;
     this->yey = new DrawingModule(nSources, nBuffer, nDevices, this->unit->getStatus());
-    this->buttons[0] = new QPushButton(tr("Сделать шаг"));
+    this->button = new QPushButton(tr("Сделать шаг"));
 
     QGridLayout *mainLayout = new QGridLayout();
 
     mainLayout->addWidget(yey);
-    mainLayout->addWidget(this->buttons[0]);
+    mainLayout->addWidget(this->button);
 
-    connect(this->buttons[0],
+    connect(this->button,
             &QPushButton::clicked, this, &Manual::check);
 
     this->setLayout(mainLayout);

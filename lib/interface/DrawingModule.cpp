@@ -13,7 +13,11 @@ DrawingModule::DrawingModule(int nSources, int nBuffers, int nDevices, StepData 
 
     this->setScene(scene);
 
-    this->drawData.push_back(initialState);
+    this->prev = new StepData(
+        std::vector<Request *>(nSources, nullptr),
+        std::vector<Request *>(nBuffers, nullptr),
+        std::vector<Request *>(nDevices, nullptr),
+        0);
 
     double curr_y = SPACE_BETWEEN;
     for (int i = 0; i < nSources; i++)
@@ -61,14 +65,12 @@ DrawingModule::DrawingModule(int nSources, int nBuffers, int nDevices, StepData 
         curr_y += SPACE_BETWEEN;
     }
 
-    // this->linesSources[2]->addToGroup(scene->addLine(150, 35 * (2 + 1), 200, 35 * (2 + 1), timeLinePen));
+    this->addStep(initialState);
 }
 
 void DrawingModule::addStep(StepData *step)
 {
     // TODO сделать проверку, что что-то изменилось
-    StepData *prev = this->drawData.back();
-
     double fromX = prev->timestamp * this->TIME_TO_PIXELS + this->MIN_X;
     double toX = step->timestamp * this->TIME_TO_PIXELS + this->MIN_X;
 
@@ -82,6 +84,10 @@ void DrawingModule::addStep(StepData *step)
         {
             this->linesSources[i]->addToGroup(
                 this->scene->addLine(toX, currY, toX, currY - 10, QPen(Qt::red, 3)));
+            QGraphicsTextItem *tt = this->scene->addText(
+                tr("%1.%2").arg(step->sourceData[i]->source).arg(step->sourceData[i]->num));
+            this->linesSources[i]->addToGroup(tt);
+            tt->setPos(toX, currY - 35);
         }
 
         this->linesSources[i]
@@ -101,6 +107,13 @@ void DrawingModule::addStep(StepData *step)
         {
             this->linesBuffers[i]->addToGroup(
                 this->scene->addLine(toX, currY, toX, currY - 10, QPen(Qt::red, 3)));
+            if (step->bufferData[i] != nullptr)
+            {
+                QGraphicsTextItem *tt = this->scene->addText(
+                    tr("%1.%2").arg(step->bufferData[i]->source).arg(step->bufferData[i]->num));
+                this->linesBuffers[i]->addToGroup(tt);
+                tt->setPos(toX, currY - 35);
+            }
         }
 
         this->linesBuffers[i]->addToGroup(this->scene->addLine(fromX, currY + offsetY, toX, currY + offsetY, QPen(Qt::red, 3)));
@@ -119,11 +132,19 @@ void DrawingModule::addStep(StepData *step)
         {
             this->linesDevices[i]->addToGroup(
                 this->scene->addLine(toX, currY, toX, currY - 10, QPen(Qt::red, 3)));
+            if (step->deviceData[i] != nullptr)
+            {
+                QGraphicsTextItem *tt = this->scene->addText(
+                    tr("%1.%2").arg(step->deviceData[i]->source).arg(step->deviceData[i]->num));
+                this->linesDevices[i]->addToGroup(tt);
+                tt->setPos(toX, currY - 35);
+            }
         }
 
         this->linesDevices[i]->addToGroup(
             this->scene->addLine(fromX, currY + offsetY, toX, currY + offsetY, QPen(Qt::red, 3)));
     }
 
-    this->drawData.push_back(step);
+    delete this->prev;
+    this->prev = step;
 }

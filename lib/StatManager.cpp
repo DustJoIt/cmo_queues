@@ -66,8 +66,6 @@ void StatsPerSource::receiveSuccess(Request *req)
     this->squaredTimeProcessing += (req->done_in - req->received_in) * (req->done_in - req->received_in);
 
     this->timeBeing += req->done_in - req->created_at;
-
-    // delete req;
 }
 
 void StatsPerSource::receiveFailure(Request *req, double time)
@@ -75,8 +73,6 @@ void StatsPerSource::receiveFailure(Request *req, double time)
     this->numberOfFailures++;
 
     this->timeBeing += time - req->created_at;
-
-    // delete req;
 }
 
 void StatsPerSource::requestMade()

@@ -8,9 +8,9 @@ ModulingUnit::ModulingUnit(int nSources, int nBuffer, int nDevices, int amount, 
     srand(time(NULL));
     this->manager = new StatManager(nSources, nDevices);
     this->amount = amount;
-    this->devices = new DeviceManager(this->manager, nSources, a, b);
+    this->devices = new DeviceManager(this->manager, nDevices, a, b);
     this->buffers = new BufferManager(this->manager, nBuffer);
-    this->sources = new SourceManager(this->manager, nDevices, labmda);
+    this->sources = new SourceManager(this->manager, nSources, labmda);
     this->sourceTime = 0;
     this->deviceTime = 0;
     // stats.getN();

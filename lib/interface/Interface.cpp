@@ -24,14 +24,13 @@ void Interface::initializeButtons()
     this->buttonsHolder = new QWidget;
     QHBoxLayout *layout = new QHBoxLayout;
 
-    buttons[0] = new QPushButton(tr("Автоматический"));
+    buttons[0] = new QPushButton(tr("Ручной"));
     layout->addWidget(buttons[0]);
-
     connect(buttons[0], &QPushButton::clicked, this, [this]() { this->startModuling(true); });
 
-    buttons[1] = new QPushButton(tr("Ручной"));
+    buttons[1] = new QPushButton(tr("Автоматический"));
     layout->addWidget(buttons[1]);
-
+    
     buttonsHolder->setLayout(layout);
 }
 

@@ -26,7 +26,7 @@ public:
     void addStep(StepData *step);
 
 private:
-    std::vector<StepData *> drawData;
+    StepData * prev = nullptr;
     // void drawStep(StepData &prev, StepData &curr);
 };
 

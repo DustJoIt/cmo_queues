@@ -63,12 +63,9 @@ void BufferManager::receiveRequest(Request *req)
     for (int i = 0; i < this->buffers_.size(); i++)
     {
         int actualIndex = (i + this->currentlyOnBufferNum) % this->buffers_.size();
-        if (req->source < this->buffers_[i].getBufferedRequestPriority())
+        if (req->source < this->buffers_[actualIndex].getBufferedRequestPriority())
         {
             this->manager->receiveFailure(this->buffers_[actualIndex].bufferedRequest_, req->created_at);
-            // std::cout << "ЗАЯВКА ВЫБИТА время: " << std::setprecision(15) << req->created_at << std::endl;
-            // std::cout << "Создана: " << this->buffers_[actualIndex].bufferedRequest_->created_at << std::endl;
-            // std::cout << "Источник: " << this->buffers_[actualIndex].bufferedRequest_->source << std::endl;
 
             this->currentPackage_.remove(&(this->buffers_[actualIndex]));
             this->buffers_[actualIndex].receiveRequest(req);
@@ -77,8 +74,6 @@ void BufferManager::receiveRequest(Request *req)
         }
     }
 
-    // std::cout << "ОТКАЗ время: " << std::setprecision(15) << req->created_at << std::endl;
-    // std::cout << "Источник: " << req->source << std::endl;
     this->manager->receiveFailure(req, req->created_at);
 };
 
@@ -99,6 +94,10 @@ void BufferManager::formPackage()
             this->currentPackage_.push_back(&(*it));
         }
     }
+
+    this->currentPackage_.sort([](Buffer *a, Buffer *b) {
+        return a->bufferedRequest_->created_at > b->bufferedRequest_->created_at;
+    });
 }
 
 std::vector<Request *> BufferManager::status()
