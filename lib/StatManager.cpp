@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <iostream>
 
 #include "../include/StatManager.hpp"
 
@@ -117,80 +116,25 @@ void StatManager::receiveFailure(Request *req, double time)
     this->stats[req->source - 1].receiveFailure(req, time);
 }
 
-void StatManager::getN()
+StatsTableData *StatManager::getStats(double time)
 {
+    StatsTableData *toGive = new StatsTableData();
     for (int i = 0; i < this->stats.size(); i++)
     {
-        StatsPerSource stat = this->stats[i];
-
-        std::cout << "Источник: " << i << ", сгенерировано заявок - " << stat.getN() << std::endl;
+        StatsPerSource tmp = this->stats[i];
+        toGive->N.push_back(tmp.getN());
+        toGive->failureProb.push_back(tmp.getFailureProb());
+        toGive->avgTimeBeing.push_back(tmp.avgTimeBeing());
+        toGive->avgTimeWaiting.push_back(tmp.avgTimeWaiting());
+        toGive->avgTimeProccessing.push_back(tmp.avgTimeProcessing());
+        toGive->dispTimeBeing.push_back(tmp.dispTimeWaiting());
+        toGive->dispTimeProccessing.push_back(tmp.dispTimeProcessing());
     }
-}
 
-void StatManager::getFailureProb()
-{
-    for (int i = 0; i < this->stats.size(); i++)
-    {
-        StatsPerSource stat = this->stats[i];
-
-        std::cout << "Источник: " << i << ", шанс отказа - " << stat.getFailureProb() << std::endl;
-    }
-}
-void StatManager::avgTimeBeing()
-{
-    for (int i = 0; i < this->stats.size(); i++)
-    {
-        StatsPerSource stat = this->stats[i];
-
-        std::cout << "Источник: " << i << ", среднее время пребывания - " << stat.avgTimeBeing() << std::endl;
-    }
-}
-
-void StatManager::avgTimeWaiting()
-{
-    for (int i = 0; i < this->stats.size(); i++)
-    {
-        StatsPerSource stat = this->stats[i];
-
-        std::cout << "Источник: " << i << ", среднее время ожидания - " << stat.avgTimeWaiting() << std::endl;
-    }
-}
-void StatManager::avgTimeProcessing()
-{
-    for (int i = 0; i < this->stats.size(); i++)
-    {
-        StatsPerSource stat = this->stats[i];
-
-        std::cout << "Источник: " << i << ", среднее время обработки - " << stat.avgTimeProcessing() << std::endl;
-    }
-}
-
-void StatManager::dispTimeWaiting()
-{
-    for (int i = 0; i < this->stats.size(); i++)
-    {
-        StatsPerSource stat = this->stats[i];
-
-        std::cout << "Источник: " << i << ", дисперсия времени ожидания - " << stat.dispTimeWaiting() << std::endl;
-    }
-}
-void StatManager::dispTimeProcessing()
-{
-    for (int i = 0; i < this->stats.size(); i++)
-    {
-        StatsPerSource stat = this->stats[i];
-
-        std::cout << "Источник: " << i << ", дисперсия времени обработки - " << stat.dispTimeProcessing() << std::endl;
-    }
-}
-
-void StatManager::getK(double time)
-{
-    // Переделать - здесь только Source, должны быть по Device (сейчас это работает, т.к. 3=3)
     for (int i = 0; i < this->deviceTimeWork.size(); i++)
     {
-        std::cout << "Источник: " << i
-                  << ", коэффициент использования устройства - "
-                  << this->deviceTimeWork[i] / time << std::endl;
+        toGive->K.push_back(this->deviceTimeWork[i] / time);
     }
+
+    return toGive;
 }

@@ -23,6 +23,7 @@ public:
     ModulingUnit(int nSources, int nBuffer, int nDevices, int amount, double labmda, double a, double b);
     StepData *getStatus();
     void singularStep();
+    StatsTableData *getStats();
     void fullyModulate();
 };
 

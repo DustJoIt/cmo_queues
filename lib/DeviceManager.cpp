@@ -32,9 +32,7 @@ void DeviceManager::getNextEmitTime()
     {
         minTime = this->devices_[0].currentRequest->done_in;
     }
-    // double minTime = this->devices_[0].isAvailable()
-    //                      ? 9999999999
-    //                      : this->devices_[0].currentRequest->done_in;
+    
     int indexOfSource = 0;
 
     for (int i = 1; i < this->devices_.size(); i++)

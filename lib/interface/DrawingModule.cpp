@@ -70,7 +70,6 @@ DrawingModule::DrawingModule(int nSources, int nBuffers, int nDevices, StepData 
 
 void DrawingModule::addStep(StepData *step)
 {
-    // TODO сделать проверку, что что-то изменилось
     double fromX = prev->timestamp * this->TIME_TO_PIXELS + this->MIN_X;
     double toX = step->timestamp * this->TIME_TO_PIXELS + this->MIN_X;
 

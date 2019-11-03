@@ -17,7 +17,6 @@ SourceManager::SourceManager(StatManager *manager, int sourcesAmount, double lam
 
 void SourceManager::getNextEmitTime()
 {
-    // Я не понимаю, как в этом языке написать reduce
     double minTime = this->sources_[0].current->created_at;
     int indexOfSource = 0;
 

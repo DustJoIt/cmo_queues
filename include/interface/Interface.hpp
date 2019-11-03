@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QGroupBox>
 #include "./Manual.hpp"
+#include "./Auto.hpp"
 
 class Interface : public QWidget
 {

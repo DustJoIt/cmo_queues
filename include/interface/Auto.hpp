@@ -2,14 +2,18 @@
 #define INTERFACE_AUTO_HPP
 
 #include <QWidget>
+#include <QTableWidget>
 #include "../ModulingUnit.hpp"
 
-class Auto: public QWidget
+class Auto : public QWidget
 {
 public:
-    Auto(ModulingUnit * unit);
+    Auto(int nSources, int nDevices, ModulingUnit *unit);
+
 private:
-    // Настройка с двумя кнопками -> они переходят в автоматический режим или в ручной 
+    QTableWidget *tables[2];
+    ModulingUnit *unit;
+    // Настройка с двумя кнопками -> они переходят в автоматический режим или в ручной
 };
 
 #endif

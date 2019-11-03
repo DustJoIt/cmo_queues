@@ -35,26 +35,31 @@ public:
     void receiveFailure(Request *req, double time);
 };
 
+struct StatsTableData
+{
+    std::vector<int> N;
+    std::vector<double> failureProb;
+    std::vector<double> avgTimeBeing;
+    std::vector<double> avgTimeWaiting;
+    std::vector<double> avgTimeProccessing;
+    std::vector<double> dispTimeBeing;
+    std::vector<double> dispTimeProccessing;
+    std::vector<double> K;
+};
+
 class StatManager
 {
 private:
     std::vector<StatsPerSource> stats;
     std::vector<double> deviceTimeWork;
+
 public:
     StatManager(int nSources, int nDevices);
     void requestMade(Request *req);
     void requestReceived(Request *req);
     void receiveSuccess(Request *req, int deviceNum);
     void receiveFailure(Request *req, double time);
-
-    void getN();
-    void getFailureProb();
-    void avgTimeBeing();
-    void avgTimeWaiting();
-    void avgTimeProcessing();
-    void dispTimeWaiting();
-    void dispTimeProcessing();
-    void getK(double time);
+    StatsTableData *getStats(double time);
 };
 
 #endif // CMO_STAT_MANAGER

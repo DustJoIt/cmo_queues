@@ -13,22 +13,12 @@ ModulingUnit::ModulingUnit(int nSources, int nBuffer, int nDevices, int amount, 
     this->sources = new SourceManager(this->manager, nSources, labmda);
     this->sourceTime = 0;
     this->deviceTime = 0;
-    // stats.getN();
-    // stats.getFailureProb();
-    // stats.avgTimeBeing();
-    // stats.avgTimeWaiting();
-    // stats.avgTimeProcessing();
-    // stats.dispTimeWaiting();
-    // stats.dispTimeProcessing();
-    // stats.getK(std::max(sourceTime, deviceTime));
 }
 
-void ModulingUnit::singularStep() 
+void ModulingUnit::singularStep()
 {
     this->sourceTime = sources->nextEventTime;
     this->deviceTime = devices->nextEventTime;
-
-
 
     if (this->deviceTime <= this->sourceTime)
     {
@@ -87,4 +77,9 @@ StepData *ModulingUnit::getStatus()
         this->buffers->status(),
         this->devices->status(),
         std::min(this->deviceTime, this->sourceTime));
+}
+
+StatsTableData *ModulingUnit::getStats()
+{
+    return this->manager->getStats(std::min(this->deviceTime, this->sourceTime));
 }

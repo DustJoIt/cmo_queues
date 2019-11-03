@@ -42,8 +42,5 @@ void Device::freeDevice()
 {
     // Вызов метода, когда освободился прибор
     this->prevProcessTime = this->currentRequest->done_in;
-    // std::cout << "Заявка обработана, время: " << std::setprecision(15) << this->currentRequest->done_in << std::endl;
-    // std::cout << "Создана: " << this->currentRequest->created_at << std::endl;
-    // std::cout << "Источник: " << this->currentRequest->source << std::endl;
     this->currentRequest = nullptr;
 }

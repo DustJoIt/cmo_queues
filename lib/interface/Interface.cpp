@@ -30,7 +30,8 @@ void Interface::initializeButtons()
 
     buttons[1] = new QPushButton(tr("Автоматический"));
     layout->addWidget(buttons[1]);
-    
+    connect(buttons[1], &QPushButton::clicked, this, [this]() { this->startModuling(false); });
+
     buttonsHolder->setLayout(layout);
 }
 
@@ -69,8 +70,15 @@ void Interface::startModuling(bool mode)
     double b = this->lineEdits[6]->text().toDouble();
     ModulingUnit *unit = new ModulingUnit(nSources, nBuffer, nDevices, amount, labmda, a, b);
 
-    // TODO Auto or Manual;
-    QWidget *goTo = new Manual(nSources, nBuffer, nDevices, unit);
+    QWidget *goTo;
+    if (mode)
+    {
+        goTo = new Manual(nSources, nBuffer, nDevices, unit);
+    }
+    else
+    {
+        goTo = new Auto(nSources, nDevices, unit);
+    }
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(goTo);
