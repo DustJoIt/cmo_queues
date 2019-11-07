@@ -16,7 +16,6 @@ private:
 public:
     void freeDevice();
     std::vector<Request *> status();
-    int requestsDone;
     double nextEventTime;
     bool canAcceptRequest();
     DeviceManager(StatManager *manager, int devicesAmount, double a, double b);

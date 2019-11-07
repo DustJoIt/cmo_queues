@@ -4,6 +4,7 @@ SourceManager::SourceManager(StatManager *manager, int sourcesAmount, double lam
 {
     this->sources_ = std::vector<Source>();
     this->manager = manager;
+    this->requestsDone = 0;
 
     for (int i = 0; i < sourcesAmount; i++)
     {
@@ -39,6 +40,7 @@ Request *SourceManager::nextEmit()
     this->getNextEmitTime();
 
     this->manager->requestMade(tmp);
+    this->requestsDone++;
     return tmp;
 }
 

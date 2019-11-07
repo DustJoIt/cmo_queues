@@ -6,7 +6,6 @@
 DeviceManager::DeviceManager(StatManager *manager, int devicesAmount, double a, double b)
 {
     this->devices_ = std::vector<Device>();
-    this->requestsDone = 0;
 
     this->manager = manager;
 
@@ -66,8 +65,6 @@ bool DeviceManager::canAcceptRequest()
 void DeviceManager::freeDevice()
 {
     // Заявка обработана
-    this->requestsDone++;
-
     this->manager->receiveSuccess(
         this->devices_[this->indexOfNextFreeDevice].currentRequest,
         this->indexOfNextFreeDevice);

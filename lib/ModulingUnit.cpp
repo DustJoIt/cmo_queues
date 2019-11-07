@@ -44,7 +44,7 @@ void ModulingUnit::singularStep()
 
 void ModulingUnit::fullyModulate()
 {
-    while (devices->requestsDone < amount)
+    while (sources->requestsDone < amount)
     {
         this->sourceTime = sources->nextEventTime;
         this->deviceTime = devices->nextEventTime;
@@ -71,7 +71,6 @@ void ModulingUnit::fullyModulate()
 
 StepData *ModulingUnit::getStatus()
 {
-    // TODO считать заявки ?
     return new StepData(
         this->sources->status(),
         this->buffers->status(),

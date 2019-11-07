@@ -15,6 +15,7 @@ private:
 
 public:
     double nextEventTime;
+    int requestsDone;
     std::vector<Request *> status();
     SourceManager(StatManager *manager, int sourcesAmount, double labmda);
     Request *nextEmit();
