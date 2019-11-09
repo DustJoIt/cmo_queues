@@ -8,7 +8,7 @@
 class SourceManager
 {
 private:
-    std::vector<Source> sources_;
+    std::vector<Source> sources;
     int indexOfSourceToEmit;
     void getNextEmitTime();
     StatManager *manager;

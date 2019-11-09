@@ -10,9 +10,9 @@
 class BufferManager
 {
 private:
-    std::vector<Buffer> buffers_;
+    std::vector<Buffer> buffers;
     int currentlyOnBufferNum;
-    std::list<Buffer *> currentPackage_;
+    std::list<Buffer *> currentPackage;
     StatManager *manager;
 
     void formPackage();

@@ -3,9 +3,9 @@
 
 Source::Source(StatManager *manager, int sourceNumber, double lambda)
 {
-    this->sourceNumber_ = sourceNumber;
-    this->lambda_ = lambda;
-    this->currNum_ = 0;
+    this->sourceNumber = sourceNumber;
+    this->lambda = lambda;
+    this->currNum = 0;
     this->current = nullptr;
     this->generateRequest();
 };
@@ -19,7 +19,7 @@ Request *Source::emitRequest()
 
 void Source::generateRequest()
 {
-    double addedTime = (-1 / (this->lambda_)) * log((double)rand() / RAND_MAX);
+    double addedTime = (-1 / (this->lambda)) * log((double)rand() / RAND_MAX);
     double prevTime = this->current == nullptr ? 0 : this->current->created_at;
-    this->current = new Request(prevTime + addedTime, this->sourceNumber_, ++this->currNum_);
+    this->current = new Request(prevTime + addedTime, this->sourceNumber, ++this->currNum);
 }

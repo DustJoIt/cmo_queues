@@ -5,13 +5,13 @@
 
 DeviceManager::DeviceManager(StatManager *manager, int devicesAmount, double a, double b)
 {
-    this->devices_ = std::vector<Device>();
+    this->devices = std::vector<Device>();
 
     this->manager = manager;
 
     for (int i = 0; i < devicesAmount; i++)
     {
-        this->devices_.push_back(Device(manager, i + 1, a, b));
+        this->devices.push_back(Device(manager, i + 1, a, b));
     }
 
     // Выбрать заявку с минимальным временем
@@ -23,22 +23,22 @@ void DeviceManager::getNextEmitTime()
 {
     // Я не понимаю, как в этом языке написать reduce
     double minTime;
-    if (this->devices_[0].isAvailable())
+    if (this->devices[0].isAvailable())
     {
         minTime = std::numeric_limits<double>::infinity();
     }
     else
     {
-        minTime = this->devices_[0].currentRequest->done_in;
+        minTime = this->devices[0].currentRequest->done_in;
     }
     
     int indexOfSource = 0;
 
-    for (int i = 1; i < this->devices_.size(); i++)
+    for (int i = 1; i < this->devices.size(); i++)
     {
-        double deviceEmitTime = this->devices_[i].isAvailable()
+        double deviceEmitTime = this->devices[i].isAvailable()
                                     ? 9999999999
-                                    : this->devices_[i].currentRequest->done_in;
+                                    : this->devices[i].currentRequest->done_in;
         if (deviceEmitTime < minTime)
         {
             minTime = deviceEmitTime;
@@ -52,9 +52,9 @@ void DeviceManager::getNextEmitTime()
 
 bool DeviceManager::canAcceptRequest()
 {
-    for (int i = 0; i < this->devices_.size(); i++)
+    for (int i = 0; i < this->devices.size(); i++)
     {
-        if (devices_[i].isAvailable())
+        if (devices[i].isAvailable())
         {
             return true;
         }
@@ -66,20 +66,20 @@ void DeviceManager::freeDevice()
 {
     // Заявка обработана
     this->manager->receiveSuccess(
-        this->devices_[this->indexOfNextFreeDevice].currentRequest,
+        this->devices[this->indexOfNextFreeDevice].currentRequest,
         this->indexOfNextFreeDevice);
 
-    this->devices_[this->indexOfNextFreeDevice].freeDevice();
+    this->devices[this->indexOfNextFreeDevice].freeDevice();
     this->getNextEmitTime();
 }
 
 void DeviceManager::receiveRequest(Request *request)
 {
-    for (int i = 0; i < this->devices_.size(); i++)
+    for (int i = 0; i < this->devices.size(); i++)
     {
-        if (devices_[i].isAvailable())
+        if (devices[i].isAvailable())
         {
-            devices_[i].receiveRequest(request);
+            devices[i].receiveRequest(request);
 
             this->manager->requestReceived(request);
 
@@ -92,9 +92,9 @@ void DeviceManager::receiveRequest(Request *request)
 std::vector<Request *> DeviceManager::status()
 {
     std::vector<Request *> toGive;
-    for (int i = 0; i < this->devices_.size(); i++)
+    for (int i = 0; i < this->devices.size(); i++)
     {
-        toGive.push_back(this->devices_[i].currentRequest);
+        toGive.push_back(this->devices[i].currentRequest);
     }
 
     return toGive;

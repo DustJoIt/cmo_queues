@@ -8,7 +8,7 @@
 class DeviceManager
 {
 private:
-    std::vector<Device> devices_;
+    std::vector<Device> devices;
     int indexOfNextFreeDevice;
     void getNextEmitTime();
     StatManager *manager;

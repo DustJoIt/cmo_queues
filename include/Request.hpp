@@ -3,9 +3,8 @@
 
 #include <vector>
 
-class Request
+struct Request
 {
-public:
     double created_at;
     int source;
     int num;

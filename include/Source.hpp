@@ -7,9 +7,9 @@
 class Source
 {
 private:
-    int sourceNumber_;
-    int currNum_;
-    double lambda_;
+    int sourceNumber;
+    int currNum;
+    double lambda;
 public:
     Request *current;
     Source(StatManager *manager, int sourceNumber, double lambda);

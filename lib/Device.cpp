@@ -6,7 +6,7 @@
 
 Device::Device(StatManager *manager, int deviceNumber, double a, double b)
 {
-    this->deviceNumber_ = deviceNumber;
+    this->deviceNumber = deviceNumber;
     this->prevProcessTime = 0;
     this->a = a;
     this->currentRequest = nullptr;

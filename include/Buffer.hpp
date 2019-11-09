@@ -7,10 +7,10 @@
 class Buffer
 {
 private:
-    int bufferNumber_;
+    int bufferNumber;
 
 public:
-    Request *bufferedRequest_;
+    Request *bufferedRequest;
     Buffer(StatManager *manager, int bufferNumber);
     bool isAvailable();
     void receiveRequest(Request *request);

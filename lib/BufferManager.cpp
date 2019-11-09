@@ -5,24 +5,24 @@
 
 BufferManager::BufferManager(StatManager *manager, int bufferNumber)
 {
-    this->buffers_ = std::vector<Buffer>();
+    this->buffers = std::vector<Buffer>();
 
     this->manager = manager;
 
     for (int i = 0; i < bufferNumber; i++)
     {
-        this->buffers_.push_back(Buffer(manager, i));
+        this->buffers.push_back(Buffer(manager, i));
     }
 
-    this->currentPackage_ = std::list<Buffer *>();
+    this->currentPackage = std::list<Buffer *>();
     this->currentlyOnBufferNum = 0;
 }
 
 bool BufferManager::canEmitRequest()
 {
-    for (int i = 0; i < this->buffers_.size(); i++)
+    for (int i = 0; i < this->buffers.size(); i++)
     {
-        if (!buffers_[i].isAvailable())
+        if (!buffers[i].isAvailable())
         {
             return true;
         };
@@ -34,13 +34,13 @@ Request *BufferManager::emitRequest()
 {
     // Проверить пакет
     // Если нет пакета, сформировать
-    if (!this->currentPackage_.size())
+    if (!this->currentPackage.size())
     {
         this->formPackage();
     }
 
-    Buffer *bufferToEmit = this->currentPackage_.back();
-    this->currentPackage_.pop_back();
+    Buffer *bufferToEmit = this->currentPackage.back();
+    this->currentPackage.pop_back();
 
     return bufferToEmit->emitRequest();
 }
@@ -48,28 +48,28 @@ Request *BufferManager::emitRequest()
 void BufferManager::receiveRequest(Request *req)
 {
     // Проверить на наличие свободных мест
-    for (int i = 0; i < this->buffers_.size(); i++)
+    for (int i = 0; i < this->buffers.size(); i++)
     {
-        int actualIndex = (i + this->currentlyOnBufferNum) % this->buffers_.size();
-        if (this->buffers_[actualIndex].isAvailable())
+        int actualIndex = (i + this->currentlyOnBufferNum) % this->buffers.size();
+        if (this->buffers[actualIndex].isAvailable())
         {
-            this->buffers_[actualIndex].receiveRequest(req);
-            this->currentlyOnBufferNum = (actualIndex + 1) % buffers_.size();
+            this->buffers[actualIndex].receiveRequest(req);
+            this->currentlyOnBufferNum = (actualIndex + 1) % buffers.size();
             return;
         }
     }
 
     // Выбить
-    for (int i = 0; i < this->buffers_.size(); i++)
+    for (int i = 0; i < this->buffers.size(); i++)
     {
-        int actualIndex = (i + this->currentlyOnBufferNum) % this->buffers_.size();
-        if (req->source < this->buffers_[actualIndex].getBufferedRequestPriority())
+        int actualIndex = (i + this->currentlyOnBufferNum) % this->buffers.size();
+        if (req->source < this->buffers[actualIndex].getBufferedRequestPriority())
         {
-            this->manager->receiveFailure(this->buffers_[actualIndex].bufferedRequest_, req->created_at);
+            this->manager->receiveFailure(this->buffers[actualIndex].bufferedRequest, req->created_at);
 
-            this->currentPackage_.remove(&(this->buffers_[actualIndex]));
-            this->buffers_[actualIndex].receiveRequest(req);
-            this->currentlyOnBufferNum = (actualIndex + 1) % buffers_.size();
+            this->currentPackage.remove(&(this->buffers[actualIndex]));
+            this->buffers[actualIndex].receiveRequest(req);
+            this->currentlyOnBufferNum = (actualIndex + 1) % buffers.size();
             return;
         }
     }
@@ -81,31 +81,31 @@ void BufferManager::formPackage()
 {
     // Пройтись, узнать максимальный приоритет
     // Пройтись в обратном порядке, взять
-    int priority = this->buffers_[0].getBufferedRequestPriority();
-    for (auto it = this->buffers_.begin(); it != this->buffers_.end(); it++)
+    int priority = this->buffers[0].getBufferedRequestPriority();
+    for (auto it = this->buffers.begin(); it != this->buffers.end(); it++)
     {
         priority = std::min(priority, (*it).getBufferedRequestPriority());
     }
 
-    for (auto it = this->buffers_.rbegin(); it != this->buffers_.rend(); it++)
+    for (auto it = this->buffers.rbegin(); it != this->buffers.rend(); it++)
     {
         if ((*it).getBufferedRequestPriority() == priority)
         {
-            this->currentPackage_.push_back(&(*it));
+            this->currentPackage.push_back(&(*it));
         }
     }
 
-    this->currentPackage_.sort([](Buffer *a, Buffer *b) {
-        return a->bufferedRequest_->created_at > b->bufferedRequest_->created_at;
+    this->currentPackage.sort([](Buffer *a, Buffer *b) {
+        return a->bufferedRequest->created_at > b->bufferedRequest->created_at;
     });
 }
 
 std::vector<Request *> BufferManager::status()
 {
     std::vector<Request *> toGive;
-    for (int i = 0; i < this->buffers_.size(); i++)
+    for (int i = 0; i < this->buffers.size(); i++)
     {
-        toGive.push_back(this->buffers_[i].bufferedRequest_);
+        toGive.push_back(this->buffers[i].bufferedRequest);
     }
 
     return toGive;

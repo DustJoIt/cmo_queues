@@ -9,7 +9,7 @@
 class Device
 {
 private:
-    int deviceNumber_;
+    int deviceNumber;
     double a;
     double b;
     double prevProcessTime;
